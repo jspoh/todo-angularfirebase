@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Todo } from './models/todo';
+import { DataService } from './services/data.service';
 
 @Component({
   selector: 'app-root',
@@ -35,10 +36,11 @@ export class AppComponent implements OnInit {
 
   todo_form: any = FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private data_service: DataService) {}
 
   ngOnInit() {
     this.todo_form = this.fb.group({
+      id: ['', []],
       title: [{ value: '', disabled: false }, [Validators.required]],
     });
   }
@@ -48,6 +50,10 @@ export class AppComponent implements OnInit {
 
     this.todo_list.push(this.todo_form.value);
     this.todo_form.reset();
+  }
+
+  getTodos() {
+    this.data_service.getTodos().subscribe((response) => console.log(response));
   }
 
   editTodo(i: number) {
