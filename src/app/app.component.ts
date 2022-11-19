@@ -9,6 +9,7 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Todo } from './models/todo';
 import { DataService } from './services/data.service';
+import { Observable, Subject, take, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -23,16 +24,7 @@ export class AppComponent implements OnInit {
   is_editing = false;
   editing_index = -1;
 
-  todo_list: Todo[] = [
-    {
-      id: '1',
-      title: 'Dummy data 1',
-    },
-    {
-      id: '2',
-      title: 'Dummy data 2',
-    },
-  ];
+  todo_list: any[] = [];
 
   todo_form: any = FormGroup;
 
@@ -43,17 +35,25 @@ export class AppComponent implements OnInit {
       id: ['', []],
       title: [{ value: '', disabled: false }, [Validators.required]],
     });
+
+    this.data_service
+      .getTodos()
+      .pipe(take(1))
+      .subscribe((value) => {
+        Object.values(value).forEach((todo) => this.todo_list.push(todo));
+        console.log('Retrieved todo list from database');
+      });
   }
 
-  onSubmit() {
-    console.log(this.todo_form.value);
+  addTodos() {
+    this.data_service.addTodo(this.todo_form.value);
 
     this.todo_list.push(this.todo_form.value);
     this.todo_form.reset();
   }
 
   getTodos() {
-    this.data_service.getTodos().subscribe((response) => console.log(response));
+    // this.data_service.getTodos().subscribe((response) => console.log(response));
   }
 
   editTodo(i: number) {
