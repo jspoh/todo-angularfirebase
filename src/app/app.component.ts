@@ -7,6 +7,7 @@ import {
   HostListener,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Todo } from './models/todo';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +22,7 @@ export class AppComponent implements OnInit {
   is_editing = false;
   editing_index = -1;
 
-  todo_list = [
+  todo_list: Todo[] = [
     {
       id: '1',
       title: 'Dummy data 1',
