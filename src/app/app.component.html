@@ -1,1 +1,53 @@
-<div class="h-screen w-screen bg-red-500">hi</div>
+<div class="relative h-screen w-screen bg-neutral-200">
+  <div
+    class="shadow-2xl max-w-2xl w-full h-max absolute top-0 bottom-0 left-0 right-0 m-auto p-12 rounded-2xl bg-neutral-300"
+  >
+    <!-- INPUT -->
+    <div class="flex justify-between gap-2 mb-8" [formGroup]="todo_form">
+      <input
+        class="w-full p-2 pb-2 bg-neutral-300 border-b border-neutral-900 focus:outline-none"
+        type="text"
+        placeholder="Title"
+        formControlName="title"
+      />
+
+      <button
+        class="uppercase w-1/5 rounded-full border border-neutral-900 bg-neutral-900 text-neutral-50 transition-all hover:scale-105"
+        [ngClass]="{
+          'hover:bg-green-500': todo_form.valid,
+          'hover:bg-red-500': todo_form.invalid
+        }"
+        (click)="onSubmit()"
+      >
+        add
+      </button>
+    </div>
+
+    <div class="">
+      <p
+        class="mx-auto w-max text-slate-500 mt-8"
+        *ngIf="todo_list.length === 0"
+      >
+        Create a new todo item above!
+      </p>
+      <div
+        class="w-full h-max p-4 bg-neutral-200 rounded-2xl mt-4 shadow-lg flex justify-between items-center hover:scale-105 transition-all"
+        [ngClass]="{ outline: is_editing && i === editing_index }"
+        *ngFor="let todo of todo_list; let i = index"
+        #list_of_todos
+      >
+        <p class="w-full" #list_of_todo_titles>{{ todo.title }}</p>
+
+        <div
+          class="flex justify-between w-1/5"
+          [ngClass]="{ hidden: is_editing && i === editing_index }"
+        >
+          <div class="cursor-pointer" (click)="editTodo(i)">Edit</div>
+          <div class="cursor-pointer" (click)="deleteTodo(i)">Delete</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TODO LIST -->
+  </div>
+</div>
